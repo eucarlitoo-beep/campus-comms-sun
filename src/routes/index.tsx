@@ -12,6 +12,8 @@ import {
   Bell,
   Bot,
   Clock,
+  ChevronDown,
+  Apple,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
