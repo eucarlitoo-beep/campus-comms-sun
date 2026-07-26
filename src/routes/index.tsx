@@ -52,32 +52,57 @@ function Landing() {
 /* ---------------- Header ---------------- */
 
 function Header() {
+  const navItems: { label: string; hasMenu?: boolean; href?: string }[] = [
+    { label: "Funcionalidades", hasMenu: true },
+    { label: "Soluções", hasMenu: true },
+    { label: "Escolas", href: "#" },
+    { label: "Recursos", hasMenu: true },
+    { label: "Preços", href: "#precos" },
+  ];
   return (
-    <header className="sticky top-4 z-50 mx-auto max-w-6xl px-4">
-      <nav className="flex items-center justify-between rounded-full border border-border bg-card/80 px-4 py-3 shadow-card-soft backdrop-blur-md sm:px-6">
+    <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur-md">
+      <nav className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6">
         <a href="#" className="flex items-center gap-2">
           <Logo />
-          <span className="font-display text-lg font-bold tracking-tight">EduDesk</span>
+          <div className="leading-none">
+            <span className="font-display text-lg font-bold tracking-tight">EduDesk</span>
+            <div className="text-[10px] font-medium text-muted-foreground">from Gestão Escolar</div>
+          </div>
         </a>
-        <div className="hidden items-center gap-7 text-sm font-medium text-muted-foreground md:flex">
-          <a href="#recursos" className="hover:text-foreground">Recursos</a>
-          <a href="#fluxo" className="hover:text-foreground">Como funciona</a>
-          <a href="#precos" className="hover:text-foreground">Preços</a>
-          <a href="#" className="hover:text-foreground">Escolas</a>
+
+        <div className="hidden items-center gap-1 lg:flex">
+          {navItems.map((item) => (
+            <a
+              key={item.label}
+              href={item.href ?? "#"}
+              className="group inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-semibold text-foreground/85 hover:bg-muted hover:text-foreground"
+            >
+              {item.label}
+              {item.hasMenu && (
+                <ChevronDown className="h-3.5 w-3.5 opacity-70 transition group-hover:translate-y-0.5" />
+              )}
+            </a>
+          ))}
         </div>
-        <div className="flex items-center gap-2">
+
+        <div className="ml-auto flex items-center gap-2">
           <a
-            href="#"
-            className="hidden rounded-full px-4 py-2 text-sm font-semibold text-foreground hover:bg-muted sm:inline-block"
+            href="#entrar"
+            className="hidden rounded-md px-3 py-2 text-sm font-semibold text-foreground hover:bg-muted sm:inline-flex"
           >
             Entrar
           </a>
           <a
-            href="#precos"
-            className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-elegant transition hover:brightness-110"
+            href="#entrar"
+            className="hidden rounded-md border-2 border-primary px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-primary transition hover:bg-primary/5 sm:inline-flex"
+          >
+            Solicitar demo
+          </a>
+          <a
+            href="#entrar"
+            className="inline-flex items-center rounded-md bg-primary px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-elegant transition hover:brightness-110 sm:px-4 sm:py-2"
           >
             Começar
-            <ArrowRight className="h-4 w-4" />
           </a>
         </div>
       </nav>
