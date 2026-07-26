@@ -951,6 +951,8 @@ function Pricing() {
 /* ---------------- Signup / Entry form ---------------- */
 
 function Signup() {
+  const navigate = Route.useNavigate();
+  const [email, setEmail] = useState("");
   return (
     <section id="entrar" className="relative overflow-hidden border-y border-border bg-gradient-soft">
       <div
@@ -972,7 +974,10 @@ function Signup() {
 
         <form
           className="mx-auto mt-8 max-w-md space-y-3 text-left"
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={(e) => {
+            e.preventDefault();
+            navigate({ to: "/onboarding", search: { email } });
+          }}
         >
           <label className="sr-only" htmlFor="signup-email">
             E-mail
@@ -981,6 +986,8 @@ function Signup() {
             id="signup-email"
             type="email"
             required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="nome@escola.edu.br"
             className="h-14 w-full rounded-xl border-2 border-primary/60 bg-card px-4 text-base text-foreground shadow-sm outline-none ring-4 ring-primary/10 transition placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20"
           />
@@ -1002,6 +1009,7 @@ function Signup() {
         <div className="mx-auto mt-5 grid max-w-md gap-3 sm:grid-cols-2">
           <button
             type="button"
+            onClick={() => navigate({ to: "/onboarding", search: { email: email || "voce@gmail.com" } })}
             className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-border bg-card text-sm font-bold text-foreground transition hover:bg-muted"
           >
             <GoogleIcon />
@@ -1009,6 +1017,7 @@ function Signup() {
           </button>
           <button
             type="button"
+            onClick={() => navigate({ to: "/onboarding", search: { email: email || "voce@icloud.com" } })}
             className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-border bg-card text-sm font-bold text-foreground transition hover:bg-muted"
           >
             <Apple className="h-4 w-4 fill-current" />
