@@ -38,7 +38,9 @@ function Landing() {
       <main>
         <Hero />
         <TrustBar />
+        <AppShowcase />
         <Features />
+
         <TicketPreview />
         <Workflow />
         <Pricing />
@@ -384,7 +386,236 @@ function TicketRow({
   );
 }
 
+/* ---------------- App Showcase (animated Slack-like demo) ---------------- */
+
+function AppShowcase() {
+  const scenes = [
+    {
+      channel: "lançamento-produto",
+      subtitle: "Canvas atualizado",
+      author: "Marcos Souza",
+      canvasName: "Rastreador de lançamento",
+      showLive: false,
+      typing: "",
+      reactions: [{ emoji: "🎯", count: 6 }],
+    },
+    {
+      channel: "lançamento-produto",
+      subtitle: "Canvas atualizado",
+      author: "Marcos Souza",
+      canvasName: "Rastreador de lançamento",
+      showLive: true,
+      typing: "Ótimo trabalho, equipe! Parec",
+      reactions: [{ emoji: "🎯", count: 6 }],
+    },
+    {
+      channel: "preparação-lançamento",
+      subtitle: "Canvas",
+      author: "Maurício Rodrigues",
+      canvasName: "Atualização de lançamento do produto",
+      showLive: false,
+      typing: "",
+      reactions: [
+        { emoji: "💬", count: 8 },
+        { emoji: "✅", count: 3 },
+      ],
+    },
+  ];
+
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setI((v) => (v + 1) % scenes.length), 3500);
+    return () => clearInterval(t);
+  }, [scenes.length]);
+  const s = scenes[i];
+
+  const sidebarChannels = [
+    { name: "lançamento-produto", key: "lançamento-produto" },
+    { name: "preparação-lançamento", key: "preparação-lançamento" },
+    { name: "rastreamento-lançamento", key: "rastreamento-lançamento" },
+  ];
+
+  return (
+    <section className="relative overflow-hidden bg-gradient-soft">
+      <div className="mx-auto max-w-6xl px-4 py-20 sm:py-28">
+        <div className="mx-auto mb-10 max-w-2xl text-center">
+          <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
+            Demonstração
+          </span>
+          <h2 className="mt-4 font-display text-3xl font-bold sm:text-4xl">
+            Sua equipe escolar, em um só lugar
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            Canais por assunto, canvas colaborativo e chamadas ao vivo — tudo dentro do EduDesk.
+          </p>
+        </div>
+
+        {/* Browser-style window */}
+        <div className="mx-auto max-w-4xl overflow-hidden rounded-2xl border border-border bg-card shadow-elegant">
+          {/* Title bar */}
+          <div className="flex items-center gap-2 border-b border-border bg-primary px-4 py-3">
+            <span className="h-3 w-3 rounded-full bg-red-400/90" />
+            <span className="h-3 w-3 rounded-full bg-yellow-300/90" />
+            <span className="h-3 w-3 rounded-full bg-green-400/90" />
+            <div className="mx-auto flex h-7 w-1/2 items-center gap-2 rounded-md bg-white/15 px-3 text-xs text-white/80">
+              <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              Pesquisar EduDesk — Escola Modelo
+            </div>
+            <span className="h-6 w-6 rounded-md bg-accent" />
+          </div>
+
+          <div className="grid grid-cols-12">
+            {/* Rail */}
+            <aside className="col-span-2 hidden flex-col items-center gap-5 bg-primary py-5 text-white sm:flex">
+              <div className="grid h-9 w-9 place-items-center rounded-lg bg-accent text-primary font-bold">E</div>
+              {[
+                { l: "Início" },
+                { l: "MDs" },
+                { l: "Atividade" },
+                { l: "Arquivos" },
+                { l: "Mais" },
+              ].map((it) => (
+                <div key={it.l} className="flex flex-col items-center gap-1 text-[10px] text-white/80">
+                  <span className="grid h-8 w-8 place-items-center rounded-lg bg-white/10">•</span>
+                  {it.l}
+                </div>
+              ))}
+              <div className="mt-auto h-9 w-9 rounded-full bg-accent/80 ring-2 ring-accent" />
+            </aside>
+
+            {/* Channel list */}
+            <aside className="col-span-4 border-r border-border bg-secondary/60 p-3 text-sm">
+              <div className="flex items-center gap-2 pb-3">
+                <span className="font-display font-bold">Escola Modelo</span>
+                <svg className="h-3 w-3 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m6 9 6 6 6-6"/></svg>
+              </div>
+              <ul className="space-y-1.5 text-muted-foreground">
+                <li>≡ Não lidas</li>
+                <li>💬 Conversas</li>
+                <li>✉ Rascunhos e enviados</li>
+              </ul>
+              <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-foreground">
+                <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m6 9 6 6 6-6"/></svg>
+                Plano de atendimento
+              </div>
+              <ul className="mt-2 space-y-1">
+                {sidebarChannels.map((c) => {
+                  const active = c.key === s.channel;
+                  return (
+                    <li
+                      key={c.key}
+                      className={`truncate rounded-md px-2 py-1 transition-colors ${
+                        active
+                          ? "bg-accent text-accent-foreground font-semibold"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      # {c.name}
+                    </li>
+                  );
+                })}
+              </ul>
+              <div className="mt-4 text-xs font-semibold">Canais</div>
+              <ul className="mt-2 space-y-1 text-muted-foreground">
+                <li># comunicados</li>
+                <li># geral</li>
+                <li># pesquisa</li>
+              </ul>
+            </aside>
+
+            {/* Main pane */}
+            <section key={i} className="col-span-12 min-h-[360px] animate-fade-in p-5 sm:col-span-6">
+              <div className="flex items-center justify-between border-b border-border pb-3">
+                <div className="flex items-center gap-2">
+                  <span className="font-display text-lg font-bold"># {s.channel}</span>
+                  <svg className="h-3 w-3 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+                <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                  <span className="rounded-md border border-border px-2 py-1">👥 35</span>
+                  <span className="rounded-md border border-border px-2 py-1">🎧</span>
+                </div>
+              </div>
+
+              <div className="mt-4 space-y-4">
+                <div className="flex gap-3">
+                  <span className="h-8 w-8 flex-shrink-0 rounded-md bg-accent" />
+                  <div>
+                    <div className="text-sm font-semibold">{s.subtitle}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {s.author} fez edições no
+                    </div>
+                    <a className="mt-1 inline-block rounded-md bg-primary/10 px-2 py-1 text-xs font-semibold text-primary">
+                      📋 {s.canvasName}
+                    </a>
+                    <div className="mt-2 flex gap-1.5">
+                      {s.reactions.map((r) => (
+                        <span
+                          key={r.emoji}
+                          className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2 py-0.5 text-xs"
+                        >
+                          {r.emoji} {r.count}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {s.showLive && (
+                  <div className="flex animate-fade-in gap-3">
+                    <span className="grid h-8 w-8 flex-shrink-0 place-items-center rounded-md bg-green-500/15 text-green-600">
+                      🎧
+                    </span>
+                    <div>
+                      <div className="flex items-center gap-2 text-sm font-semibold">
+                        Um círculo está acontecendo
+                        <span className="rounded bg-red-500 px-1.5 py-0.5 text-[10px] font-bold uppercase text-white">
+                          Ao vivo
+                        </span>
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        Sara da Silva e outras 5 pessoas estão nele.{" "}
+                        <a className="font-semibold text-primary underline">Participar</a>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-6 flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-sm">
+                <span className="text-muted-foreground">＋</span>
+                <span className={s.typing ? "text-foreground" : "text-muted-foreground"}>
+                  {s.typing || "Mensagem para " + s.channel}
+                  {s.typing && <span className="ml-0.5 inline-block h-4 w-0.5 animate-pulse bg-foreground align-middle" />}
+                </span>
+                <span className="ml-auto text-primary">➤</span>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        {/* Scene dots */}
+        <div className="mt-6 flex justify-center gap-2">
+          {scenes.map((_, k) => (
+            <button
+              key={k}
+              onClick={() => setI(k)}
+              aria-label={`Cena ${k + 1}`}
+              className={`h-2 rounded-full transition-all ${
+                k === i ? "w-8 bg-primary" : "w-2 bg-border"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ---------------- Trust bar ---------------- */
+
 
 function TrustBar() {
   const items = [
