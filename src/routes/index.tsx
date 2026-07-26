@@ -794,7 +794,7 @@ function GoogleIcon() {
 
 /* ---------------- CTA ---------------- */
 
-
+function CTA() {
   return (
     <section className="mx-auto max-w-6xl px-4 pb-24">
       <div className="relative overflow-hidden rounded-3xl bg-gradient-hero px-8 py-16 text-center text-primary-foreground shadow-elegant">
