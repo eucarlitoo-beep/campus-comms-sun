@@ -59,8 +59,27 @@ function Header() {
     { label: "Recursos", hasMenu: true },
     { label: "Preços", href: "#precos" },
   ];
+
+  const [hidden, setHidden] = useState(false);
+  useEffect(() => {
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      const goingDown = y > lastY;
+      if (y > 80 && goingDown) setHidden(true);
+      else if (!goingDown) setHidden(false);
+      lastY = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur-md">
+    <header
+      className={`sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur-md transition-transform duration-300 ${
+        hidden ? "-translate-y-full" : "translate-y-0"
+      }`}
+    >
       <nav className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6">
         <a href="#" className="flex items-center gap-2">
           <Logo />
