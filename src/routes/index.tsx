@@ -697,9 +697,104 @@ function Pricing() {
   );
 }
 
+/* ---------------- Signup / Entry form ---------------- */
+
+function Signup() {
+  return (
+    <section id="entrar" className="relative overflow-hidden border-y border-border bg-gradient-soft">
+      <div
+        className="absolute -top-24 left-1/2 -z-0 h-[420px] w-[820px] -translate-x-1/2 rounded-full opacity-25 blur-3xl"
+        style={{ background: "var(--gradient-hero)" }}
+      />
+      <div className="relative mx-auto max-w-xl px-4 py-24 text-center">
+        <div className="mx-auto flex items-center justify-center gap-2">
+          <Logo />
+          <span className="font-display text-2xl font-bold tracking-tight">EduDesk</span>
+        </div>
+
+        <h2 className="mt-10 font-display text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          Primeiro, insira seu e-mail
+        </h2>
+        <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground sm:text-base">
+          Recomendamos usar o <strong className="text-foreground">e-mail institucional da escola</strong>.
+        </p>
+
+        <form
+          className="mx-auto mt-8 max-w-md space-y-3 text-left"
+          onSubmit={(e) => e.preventDefault()}
+        >
+          <label className="sr-only" htmlFor="signup-email">
+            E-mail
+          </label>
+          <input
+            id="signup-email"
+            type="email"
+            required
+            placeholder="nome@escola.edu.br"
+            className="h-14 w-full rounded-xl border-2 border-primary/60 bg-card px-4 text-base text-foreground shadow-sm outline-none ring-4 ring-primary/10 transition placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20"
+          />
+          <button
+            type="submit"
+            className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-primary text-base font-bold text-primary-foreground shadow-elegant transition hover:brightness-110"
+          >
+            Continuar
+            <ArrowRight className="h-4 w-4" />
+          </button>
+        </form>
+
+        <div className="mx-auto mt-8 flex max-w-md items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
+          <span className="h-px flex-1 bg-border" />
+          Outras opções
+          <span className="h-px flex-1 bg-border" />
+        </div>
+
+        <div className="mx-auto mt-5 grid max-w-md gap-3 sm:grid-cols-2">
+          <button
+            type="button"
+            className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-border bg-card text-sm font-bold text-foreground transition hover:bg-muted"
+          >
+            <GoogleIcon />
+            Google
+          </button>
+          <button
+            type="button"
+            className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-border bg-card text-sm font-bold text-foreground transition hover:bg-muted"
+          >
+            <Apple className="h-4 w-4 fill-current" />
+            Apple
+          </button>
+        </div>
+
+        <p className="mt-8 text-sm text-muted-foreground">
+          Já usa o EduDesk?{" "}
+          <a href="#" className="font-semibold text-primary hover:underline">
+            Entrar em uma escola existente
+          </a>
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function GoogleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden>
+      <path
+        fill="#EA4335"
+        d="M12 10.2v3.9h5.5c-.24 1.4-1.7 4.1-5.5 4.1-3.3 0-6-2.7-6-6.1s2.7-6.1 6-6.1c1.9 0 3.2.8 3.9 1.5l2.7-2.6C16.9 3.3 14.7 2.3 12 2.3 6.7 2.3 2.4 6.6 2.4 12s4.3 9.7 9.6 9.7c5.5 0 9.2-3.9 9.2-9.4 0-.6-.1-1.1-.2-1.6H12z"
+      />
+      <path
+        fill="#34A853"
+        d="M3.6 7.5l3.2 2.3C7.6 8 9.6 6.2 12 6.2c1.9 0 3.2.8 3.9 1.5l2.7-2.6C16.9 3.3 14.7 2.3 12 2.3 8.1 2.3 4.7 4.4 3.6 7.5z"
+        opacity=".9"
+      />
+    </svg>
+  );
+}
+
 /* ---------------- CTA ---------------- */
 
-function CTA() {
+
   return (
     <section className="mx-auto max-w-6xl px-4 pb-24">
       <div className="relative overflow-hidden rounded-3xl bg-gradient-hero px-8 py-16 text-center text-primary-foreground shadow-elegant">
