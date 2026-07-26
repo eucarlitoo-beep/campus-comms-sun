@@ -38,7 +38,9 @@ function Landing() {
       <main>
         <Hero />
         <TrustBar />
+        <AppShowcase />
         <Features />
+
         <TicketPreview />
         <Workflow />
         <Pricing />
