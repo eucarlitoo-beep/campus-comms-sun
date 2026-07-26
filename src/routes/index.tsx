@@ -41,6 +41,7 @@ function Landing() {
         <TicketPreview />
         <Workflow />
         <Pricing />
+        <Signup />
         <CTA />
       </main>
       <Footer />
