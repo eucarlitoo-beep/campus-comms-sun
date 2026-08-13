@@ -378,7 +378,7 @@ function TicketRow({
         <div className="mt-2 flex items-center gap-2">
           <span className={`rounded-md px-2 py-0.5 text-[11px] font-semibold ${toneCls}`}>{tag}</span>
           <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-            #EDU-{Math.floor(Math.random() * 900 + 100)}
+            #EDU-{100 + (name.split("").reduce((a, c) => a + c.charCodeAt(0), 0) % 900)}
           </span>
         </div>
       </div>
