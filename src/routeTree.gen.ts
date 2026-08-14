@@ -15,6 +15,7 @@ import { Route as PrecosRouteImport } from './routes/precos'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as FuncionalidadesRouteImport } from './routes/funcionalidades'
 import { Route as EscolasRouteImport } from './routes/escolas'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SolucoesRoute = SolucoesRouteImport.update({
@@ -47,6 +48,11 @@ const EscolasRoute = EscolasRouteImport.update({
   path: '/escolas',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -55,6 +61,7 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/escolas': typeof EscolasRoute
   '/funcionalidades': typeof FuncionalidadesRoute
   '/onboarding': typeof OnboardingRoute
@@ -64,6 +71,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/escolas': typeof EscolasRoute
   '/funcionalidades': typeof FuncionalidadesRoute
   '/onboarding': typeof OnboardingRoute
@@ -74,6 +82,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/escolas': typeof EscolasRoute
   '/funcionalidades': typeof FuncionalidadesRoute
   '/onboarding': typeof OnboardingRoute
@@ -85,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/escolas'
     | '/funcionalidades'
     | '/onboarding'
@@ -94,6 +104,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/escolas'
     | '/funcionalidades'
     | '/onboarding'
@@ -103,6 +114,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/escolas'
     | '/funcionalidades'
     | '/onboarding'
@@ -113,6 +125,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   EscolasRoute: typeof EscolasRoute
   FuncionalidadesRoute: typeof FuncionalidadesRoute
   OnboardingRoute: typeof OnboardingRoute
@@ -165,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EscolasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -177,6 +197,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   EscolasRoute: EscolasRoute,
   FuncionalidadesRoute: FuncionalidadesRoute,
   OnboardingRoute: OnboardingRoute,
