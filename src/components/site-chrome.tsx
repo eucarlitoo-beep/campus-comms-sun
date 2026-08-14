@@ -124,7 +124,6 @@ export function SiteHeader() {
           </Link>
           <Link
             to="/auth"
-            search={{ mode: "signup" }}
             className="inline-flex items-center rounded-md bg-primary px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-elegant transition hover:brightness-110 sm:px-4 sm:py-2"
           >
             Começar
