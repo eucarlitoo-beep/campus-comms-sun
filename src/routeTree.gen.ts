@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SolucoesRouteImport } from './routes/solucoes'
 import { Route as RecursosRouteImport } from './routes/recursos'
+import { Route as PrecosRouteImport } from './routes/precos'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as FuncionalidadesRouteImport } from './routes/funcionalidades'
 import { Route as EscolasRouteImport } from './routes/escolas'
@@ -24,6 +25,11 @@ const SolucoesRoute = SolucoesRouteImport.update({
 const RecursosRoute = RecursosRouteImport.update({
   id: '/recursos',
   path: '/recursos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrecosRoute = PrecosRouteImport.update({
+  id: '/precos',
+  path: '/precos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OnboardingRoute = OnboardingRouteImport.update({
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/escolas': typeof EscolasRoute
   '/funcionalidades': typeof FuncionalidadesRoute
   '/onboarding': typeof OnboardingRoute
+  '/precos': typeof PrecosRoute
   '/recursos': typeof RecursosRoute
   '/solucoes': typeof SolucoesRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/escolas': typeof EscolasRoute
   '/funcionalidades': typeof FuncionalidadesRoute
   '/onboarding': typeof OnboardingRoute
+  '/precos': typeof PrecosRoute
   '/recursos': typeof RecursosRoute
   '/solucoes': typeof SolucoesRoute
 }
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/escolas': typeof EscolasRoute
   '/funcionalidades': typeof FuncionalidadesRoute
   '/onboarding': typeof OnboardingRoute
+  '/precos': typeof PrecosRoute
   '/recursos': typeof RecursosRoute
   '/solucoes': typeof SolucoesRoute
 }
@@ -79,6 +88,7 @@ export interface FileRouteTypes {
     | '/escolas'
     | '/funcionalidades'
     | '/onboarding'
+    | '/precos'
     | '/recursos'
     | '/solucoes'
   fileRoutesByTo: FileRoutesByTo
@@ -87,6 +97,7 @@ export interface FileRouteTypes {
     | '/escolas'
     | '/funcionalidades'
     | '/onboarding'
+    | '/precos'
     | '/recursos'
     | '/solucoes'
   id:
@@ -95,6 +106,7 @@ export interface FileRouteTypes {
     | '/escolas'
     | '/funcionalidades'
     | '/onboarding'
+    | '/precos'
     | '/recursos'
     | '/solucoes'
   fileRoutesById: FileRoutesById
@@ -104,6 +116,7 @@ export interface RootRouteChildren {
   EscolasRoute: typeof EscolasRoute
   FuncionalidadesRoute: typeof FuncionalidadesRoute
   OnboardingRoute: typeof OnboardingRoute
+  PrecosRoute: typeof PrecosRoute
   RecursosRoute: typeof RecursosRoute
   SolucoesRoute: typeof SolucoesRoute
 }
@@ -122,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/recursos'
       fullPath: '/recursos'
       preLoaderRoute: typeof RecursosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/precos': {
+      id: '/precos'
+      path: '/precos'
+      fullPath: '/precos'
+      preLoaderRoute: typeof PrecosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/onboarding': {
@@ -160,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   EscolasRoute: EscolasRoute,
   FuncionalidadesRoute: FuncionalidadesRoute,
   OnboardingRoute: OnboardingRoute,
+  PrecosRoute: PrecosRoute,
   RecursosRoute: RecursosRoute,
   SolucoesRoute: SolucoesRoute,
 }
