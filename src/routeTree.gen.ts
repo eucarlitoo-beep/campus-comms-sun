@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SolucoesRouteImport } from './routes/solucoes'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as FuncionalidadesRouteImport } from './routes/funcionalidades'
+import { Route as EscolasRouteImport } from './routes/escolas'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SolucoesRoute = SolucoesRouteImport.update({
@@ -29,6 +30,11 @@ const FuncionalidadesRoute = FuncionalidadesRouteImport.update({
   path: '/funcionalidades',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EscolasRoute = EscolasRouteImport.update({
+  id: '/escolas',
+  path: '/escolas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,12 +43,14 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/escolas': typeof EscolasRoute
   '/funcionalidades': typeof FuncionalidadesRoute
   '/onboarding': typeof OnboardingRoute
   '/solucoes': typeof SolucoesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/escolas': typeof EscolasRoute
   '/funcionalidades': typeof FuncionalidadesRoute
   '/onboarding': typeof OnboardingRoute
   '/solucoes': typeof SolucoesRoute
@@ -50,20 +58,28 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/escolas': typeof EscolasRoute
   '/funcionalidades': typeof FuncionalidadesRoute
   '/onboarding': typeof OnboardingRoute
   '/solucoes': typeof SolucoesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/funcionalidades' | '/onboarding' | '/solucoes'
+  fullPaths: '/' | '/escolas' | '/funcionalidades' | '/onboarding' | '/solucoes'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/funcionalidades' | '/onboarding' | '/solucoes'
-  id: '__root__' | '/' | '/funcionalidades' | '/onboarding' | '/solucoes'
+  to: '/' | '/escolas' | '/funcionalidades' | '/onboarding' | '/solucoes'
+  id:
+    | '__root__'
+    | '/'
+    | '/escolas'
+    | '/funcionalidades'
+    | '/onboarding'
+    | '/solucoes'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EscolasRoute: typeof EscolasRoute
   FuncionalidadesRoute: typeof FuncionalidadesRoute
   OnboardingRoute: typeof OnboardingRoute
   SolucoesRoute: typeof SolucoesRoute
@@ -92,6 +108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FuncionalidadesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/escolas': {
+      id: '/escolas'
+      path: '/escolas'
+      fullPath: '/escolas'
+      preLoaderRoute: typeof EscolasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,6 +127,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EscolasRoute: EscolasRoute,
   FuncionalidadesRoute: FuncionalidadesRoute,
   OnboardingRoute: OnboardingRoute,
   SolucoesRoute: SolucoesRoute,
