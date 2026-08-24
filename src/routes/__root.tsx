@@ -77,11 +77,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "EduDesk — Helpdesk para Gestão Escolar" },
-      { name: "description", content: "Central de chamados e suporte para escolas. Organize tickets, equipes e atendimentos em um só lugar." },
-      { name: "author", content: "EduDesk" },
-      { property: "og:title", content: "EduDesk — Helpdesk para Gestão Escolar" },
-      { property: "og:description", content: "Central de chamados e suporte para escolas com canais, automações e SLA." },
+      { title: "AtlasDesk — Helpdesk para Gestão Escolar" },
+      {
+        name: "description",
+        content:
+          "Central de chamados e suporte para escolas. Organize tickets, equipes e atendimentos em um só lugar.",
+      },
+      { name: "author", content: "AtlasDesk" },
+      { property: "og:title", content: "AtlasDesk — Helpdesk para Gestão Escolar" },
+      {
+        property: "og:description",
+        content: "Central de chamados e suporte para escolas com canais, automações e SLA.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },

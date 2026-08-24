@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Ticket,
   Users,
@@ -15,12 +15,28 @@ import {
   Clock,
   ChevronDown,
   Apple,
+  Search,
+  Hash,
+  Sparkles,
+  KanbanSquare,
+  Puzzle,
+  Send,
+  FileText,
+  Video,
+  Building2,
+  Layers,
+  Code2,
+  LayoutTemplate,
+  TrendingUp,
+  Play,
+  Pause,
 } from "lucide-react";
+import { pickApps } from "@/lib/app-icons";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "EduDesk — Helpdesk para Gestão Escolar" },
+      { title: "AtlasDesk — Helpdesk para Gestão Escolar" },
       {
         name: "description",
         content:
@@ -36,15 +52,16 @@ function Landing() {
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main>
+        <Signup />
         <Hero />
         <TrustBar />
         <AppShowcase />
+        <PillarsShowcase />
         <Features />
 
         <TicketPreview />
         <Workflow />
         <Pricing />
-        <Signup />
         <CTA />
       </main>
       <Footer />
@@ -54,8 +71,69 @@ function Landing() {
 
 /* ---------------- Header ---------------- */
 
-function Header() {
-  const navItems: { label: string; hasMenu?: boolean; href?: string }[] = [
+const FEATURE_MENU = [
+  {
+    title: "Colaboração",
+    items: [
+      { label: "Canais", sub: "Organize turmas e equipes" },
+      { label: "Mensagens", sub: "Converse com toda a escola" },
+      { label: "Círculos", sub: "Reuniões com áudio e vídeo" },
+      { label: "Clipes", sub: "Grave e compartilhe recados" },
+    ],
+  },
+  {
+    title: "Gestão de chamados",
+    items: [
+      { label: "Modelos", sub: "Abra qualquer chamado rápido" },
+      { label: "Canvas", sub: "Documentos e avisos avançados" },
+      { label: "Listas", sub: "Organize e acompanhe pedidos" },
+      { label: "Arquivos", sub: "Centralize anexos e documentos" },
+    ],
+  },
+  {
+    title: "Plataforma",
+    items: [
+      { label: "Apps e integrações", sub: "Conecte o sistema acadêmico" },
+      { label: "Automações", sub: "Automatize tarefas do dia a dia" },
+    ],
+  },
+  {
+    title: "Inteligência",
+    items: [
+      { label: "IA no AtlasDesk", sub: "Trabalhe com mais eficiência" },
+      { label: "Assistente IA", sub: "Seu agente pessoal na escola" },
+      { label: "Pesquisa", sub: "Encontre tudo na barra de busca" },
+    ],
+  },
+  {
+    title: "Admin e segurança",
+    items: [
+      { label: "Segurança", sub: "Proteja os dados da escola" },
+      { label: "Mapa do AtlasDesk", sub: "Descubra perfis e setores" },
+    ],
+  },
+];
+
+const SOLUTIONS_MENU = [
+  { label: "Secretaria", sub: "Centralize matrículas e documentos" },
+  { label: "Coordenação pedagógica", sub: "Alinhe turmas e professores" },
+  { label: "TI e suporte", sub: "Resolva chamados técnicos" },
+  { label: "Responsáveis", sub: "Comunicação direta com a família" },
+];
+
+const RESOURCES_MENU = [
+  { label: "Central de ajuda", sub: "Tire dúvidas sobre o AtlasDesk" },
+  { label: "Novidades", sub: "Veja os últimos lançamentos" },
+  { label: "Histórias de escolas", sub: "Casos reais de sucesso" },
+  { label: "Blog", sub: "Conteúdos sobre gestão escolar" },
+];
+
+export function Header() {
+  const navItems: {
+    label: string;
+    hasMenu?: boolean;
+    href?: string;
+  }[] = [
     { label: "Funcionalidades", hasMenu: true },
     { label: "Soluções", hasMenu: true },
     { label: "Escolas", href: "#" },
@@ -63,6 +141,7 @@ function Header() {
     { label: "Preços", href: "#precos" },
   ];
 
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [hidden, setHidden] = useState(false);
   useEffect(() => {
     let lastY = window.scrollY;
@@ -79,6 +158,7 @@ function Header() {
 
   return (
     <header
+      onMouseLeave={() => setOpenMenu(null)}
       className={`sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur-md transition-transform duration-300 ${
         hidden ? "-translate-y-full" : "translate-y-0"
       }`}
@@ -87,7 +167,7 @@ function Header() {
         <a href="#" className="flex items-center gap-2">
           <Logo />
           <div className="leading-none">
-            <span className="font-display text-lg font-bold tracking-tight">EduDesk</span>
+            <span className="font-display text-lg font-bold tracking-tight">AtlasDesk</span>
             <div className="text-[10px] font-medium text-muted-foreground">from Gestão Escolar</div>
           </div>
         </a>
@@ -97,11 +177,16 @@ function Header() {
             <a
               key={item.label}
               href={item.href ?? "#"}
+              onMouseEnter={() => setOpenMenu(item.hasMenu ? item.label : null)}
               className="group inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-semibold text-foreground/85 hover:bg-muted hover:text-foreground"
             >
               {item.label}
               {item.hasMenu && (
-                <ChevronDown className="h-3.5 w-3.5 opacity-70 transition group-hover:translate-y-0.5" />
+                <ChevronDown
+                  className={`h-3.5 w-3.5 opacity-70 transition ${
+                    openMenu === item.label ? "-rotate-180" : ""
+                  }`}
+                />
               )}
             </a>
           ))}
@@ -128,18 +213,82 @@ function Header() {
           </a>
         </div>
       </nav>
+
+      {openMenu === "Funcionalidades" && (
+        <div className="absolute inset-x-0 top-full hidden border-t border-border bg-card shadow-elegant lg:block">
+          <div className="mx-auto grid max-w-7xl grid-cols-5 gap-6 px-6 py-8">
+            {FEATURE_MENU.map((col) => (
+              <div key={col.title}>
+                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  {col.title}
+                </p>
+                <ul className="mt-3 space-y-3">
+                  {col.items.map((it) => (
+                    <li key={it.label}>
+                      <a
+                        href={
+                          it.label === "Canais"
+                            ? "/canais"
+                            : it.label === "Mensagens"
+                              ? "/mensagens"
+                              : it.label === "Modelos"
+                                ? "/modelos"
+                                : "#"
+                        }
+                        className="block rounded-md hover:bg-muted -mx-2 px-2 py-1"
+                      >
+                        <p className="text-sm font-semibold text-foreground">{it.label}</p>
+                        <p className="text-xs text-muted-foreground">{it.sub}</p>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {openMenu === "Soluções" && (
+        <div className="absolute inset-x-0 top-full hidden border-t border-border bg-card shadow-elegant lg:block">
+          <div className="mx-auto grid max-w-3xl grid-cols-2 gap-4 px-6 py-6">
+            {SOLUTIONS_MENU.map((it) => (
+              <a
+                key={it.label}
+                href={it.label === "TI e suporte" ? "/ti-suporte" : "#"}
+                className="rounded-md px-3 py-2 hover:bg-muted"
+              >
+                <p className="text-sm font-semibold text-foreground">{it.label}</p>
+                <p className="text-xs text-muted-foreground">{it.sub}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {openMenu === "Recursos" && (
+        <div className="absolute inset-x-0 top-full hidden border-t border-border bg-card shadow-elegant lg:block">
+          <div className="mx-auto grid max-w-3xl grid-cols-2 gap-4 px-6 py-6">
+            {RESOURCES_MENU.map((it) => (
+              <a key={it.label} href="#" className="rounded-md px-3 py-2 hover:bg-muted">
+                <p className="text-sm font-semibold text-foreground">{it.label}</p>
+                <p className="text-xs text-muted-foreground">{it.sub}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </header>
   );
 }
 
-function Logo() {
+function Logo({ className = "h-9 w-9" }: { className?: string }) {
   return (
-    <div className="grid h-9 w-9 grid-cols-2 grid-rows-2 gap-0.5">
-      <span className="rounded-tl-md bg-primary" />
-      <span className="rounded-tr-md bg-accent" />
-      <span className="rounded-bl-md bg-accent" />
-      <span className="rounded-br-md bg-primary" />
-    </div>
+    <img
+      src="/brand/atlasdesk-icon.png"
+      alt="AtlasDesk"
+      className={`${className} object-contain`}
+    />
   );
 }
 
@@ -161,11 +310,12 @@ function Hero() {
             Helpdesk feito para escolas
           </span>
           <h1 className="mt-6 text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
-            Suporte escolar <span className="text-gradient-brand">sem caos</span>, do primeiro chamado ao encerramento.
+            Suporte escolar <span className="text-gradient-brand">sem caos</span>, do primeiro
+            chamado ao encerramento.
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-            Centralize dúvidas de pais, solicitações da secretaria e chamados de TI em uma única plataforma —
-            com canais, automações e SLA para toda a comunidade escolar.
+            Centralize dúvidas de pais, solicitações da secretaria e chamados de TI em uma única
+            plataforma — com canais, automações e SLA para toda a comunidade escolar.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -211,7 +361,7 @@ function HeroMock() {
           <span className="h-3 w-3 rounded-full bg-accent" />
           <span className="h-3 w-3 rounded-full bg-emerald-400/90" />
           <div className="mx-auto w-1/2 rounded-full bg-primary-foreground/15 py-1 text-center text-xs text-primary-foreground/80">
-            edudesk.escola.app
+            atlasdesk.escola.app
           </div>
         </div>
 
@@ -225,7 +375,7 @@ function HeroMock() {
                 <span className="rounded-bl-sm bg-accent" />
                 <span className="rounded-br-sm bg-primary-foreground" />
               </div>
-              <span className="text-sm font-bold">EduDesk</span>
+              <span className="text-sm font-bold">AtlasDesk</span>
             </div>
             <SideItem icon={<Ticket className="h-4 w-4" />} label="Chamados" badge="12" active />
             <SideItem icon={<MessageSquare className="h-4 w-4" />} label="Canais" />
@@ -317,7 +467,9 @@ function SideItem({
   return (
     <div
       className={`mb-1 flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm ${
-        active ? "bg-primary-foreground/15 font-semibold" : "text-primary-foreground/85 hover:bg-primary-foreground/10"
+        active
+          ? "bg-primary-foreground/15 font-semibold"
+          : "text-primary-foreground/85 hover:bg-primary-foreground/10"
       }`}
     >
       {icon}
@@ -361,8 +513,8 @@ function TicketRow({
     tone === "primary"
       ? "bg-primary/10 text-primary"
       : tone === "accent"
-      ? "bg-accent/50 text-accent-foreground"
-      : "bg-muted text-muted-foreground";
+        ? "bg-accent/50 text-accent-foreground"
+        : "bg-muted text-muted-foreground";
   return (
     <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-3 transition hover:shadow-card-soft">
       <div className="grid h-10 w-10 place-items-center rounded-full bg-gradient-brand text-sm font-bold text-primary-foreground">
@@ -376,9 +528,11 @@ function TicketRow({
         </div>
         <p className="mt-0.5 text-sm text-foreground/90">{subject}</p>
         <div className="mt-2 flex items-center gap-2">
-          <span className={`rounded-md px-2 py-0.5 text-[11px] font-semibold ${toneCls}`}>{tag}</span>
+          <span className={`rounded-md px-2 py-0.5 text-[11px] font-semibold ${toneCls}`}>
+            {tag}
+          </span>
           <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-            #EDU-{100 + (name.split("").reduce((a, c) => a + c.charCodeAt(0), 0) % 900)}
+            #EDU-{Math.floor(Math.random() * 900 + 100)}
           </span>
         </div>
       </div>
@@ -423,10 +577,12 @@ function AppShowcase() {
   ];
 
   const [i, setI] = useState(0);
+  const [paused, setPaused] = useState(false);
   useEffect(() => {
+    if (paused) return;
     const t = setInterval(() => setI((v) => (v + 1) % scenes.length), 3500);
     return () => clearInterval(t);
-  }, [scenes.length]);
+  }, [scenes.length, paused]);
   const s = scenes[i];
 
   const sidebarChannels = [
@@ -446,7 +602,7 @@ function AppShowcase() {
             Sua equipe escolar, em um só lugar
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Canais por assunto, canvas colaborativo e chamadas ao vivo — tudo dentro do EduDesk.
+            Canais por assunto, canvas colaborativo e chamadas ao vivo — tudo dentro do AtlasDesk.
           </p>
         </div>
 
@@ -458,11 +614,17 @@ function AppShowcase() {
             <span className="h-3 w-3 rounded-full bg-yellow-300/90" />
             <span className="h-3 w-3 rounded-full bg-green-400/90" />
             <div className="mx-auto flex h-7 w-1/2 items-center gap-2 rounded-md bg-white/15 px-3 text-xs text-white/80">
-              <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                className="h-3.5 w-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <circle cx="11" cy="11" r="7" />
                 <path d="m21 21-4.3-4.3" />
               </svg>
-              Pesquisar EduDesk — Escola Modelo
+              Pesquisar AtlasDesk — Escola Modelo
             </div>
             <span className="h-6 w-6 rounded-md bg-accent" />
           </div>
@@ -470,7 +632,9 @@ function AppShowcase() {
           <div className="grid grid-cols-12">
             {/* Rail */}
             <aside className="col-span-2 hidden flex-col items-center gap-5 bg-primary py-5 text-white sm:flex">
-              <div className="grid h-9 w-9 place-items-center rounded-lg bg-accent text-primary font-bold">E</div>
+              <div className="grid h-9 w-9 place-items-center rounded-lg bg-accent text-primary font-bold">
+                A
+              </div>
               {[
                 { l: "Início" },
                 { l: "MDs" },
@@ -478,7 +642,10 @@ function AppShowcase() {
                 { l: "Arquivos" },
                 { l: "Mais" },
               ].map((it) => (
-                <div key={it.l} className="flex flex-col items-center gap-1 text-[10px] text-white/80">
+                <div
+                  key={it.l}
+                  className="flex flex-col items-center gap-1 text-[10px] text-white/80"
+                >
                   <span className="grid h-8 w-8 place-items-center rounded-lg bg-white/10">•</span>
                   {it.l}
                 </div>
@@ -490,7 +657,15 @@ function AppShowcase() {
             <aside className="col-span-4 border-r border-border bg-secondary/60 p-3 text-sm">
               <div className="flex items-center gap-2 pb-3">
                 <span className="font-display font-bold">Escola Modelo</span>
-                <svg className="h-3 w-3 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m6 9 6 6 6-6"/></svg>
+                <svg
+                  className="h-3 w-3 text-muted-foreground"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
               </div>
               <ul className="space-y-1.5 text-muted-foreground">
                 <li>≡ Não lidas</li>
@@ -498,7 +673,15 @@ function AppShowcase() {
                 <li>✉ Rascunhos e enviados</li>
               </ul>
               <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-foreground">
-                <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m6 9 6 6 6-6"/></svg>
+                <svg
+                  className="h-3 w-3"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
                 Plano de atendimento
               </div>
               <ul className="mt-2 space-y-1">
@@ -524,14 +707,33 @@ function AppShowcase() {
                 <li># geral</li>
                 <li># pesquisa</li>
               </ul>
+              <div className="mt-4 text-xs font-semibold">Mensagens diretas</div>
+              <ul className="mt-2 space-y-1 text-muted-foreground">
+                <li>🟢 Coordenação</li>
+              </ul>
+              <div className="mt-4 text-xs font-semibold">Agentes e apps</div>
+              <ul className="mt-2 space-y-1 text-muted-foreground">
+                <li>🤖 Assistente IA</li>
+              </ul>
             </aside>
 
             {/* Main pane */}
-            <section key={i} className="col-span-12 min-h-[360px] animate-fade-in p-5 sm:col-span-6">
+            <section
+              key={i}
+              className="col-span-12 min-h-[360px] animate-fade-in p-5 sm:col-span-6"
+            >
               <div className="flex items-center justify-between border-b border-border pb-3">
                 <div className="flex items-center gap-2">
                   <span className="font-display text-lg font-bold"># {s.channel}</span>
-                  <svg className="h-3 w-3 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m6 9 6 6 6-6"/></svg>
+                  <svg
+                    className="h-3 w-3 text-muted-foreground"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
                 </div>
                 <div className="flex items-center gap-3 text-xs text-muted-foreground">
                   <span className="rounded-md border border-border px-2 py-1">👥 35</span>
@@ -544,9 +746,7 @@ function AppShowcase() {
                   <span className="h-8 w-8 flex-shrink-0 rounded-md bg-accent" />
                   <div>
                     <div className="text-sm font-semibold">{s.subtitle}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {s.author} fez edições no
-                    </div>
+                    <div className="text-xs text-muted-foreground">{s.author} fez edições no</div>
                     <a className="mt-1 inline-block rounded-md bg-primary/10 px-2 py-1 text-xs font-semibold text-primary">
                       📋 {s.canvasName}
                     </a>
@@ -588,7 +788,9 @@ function AppShowcase() {
                 <span className="text-muted-foreground">＋</span>
                 <span className={s.typing ? "text-foreground" : "text-muted-foreground"}>
                   {s.typing || "Mensagem para " + s.channel}
-                  {s.typing && <span className="ml-0.5 inline-block h-4 w-0.5 animate-pulse bg-foreground align-middle" />}
+                  {s.typing && (
+                    <span className="ml-0.5 inline-block h-4 w-0.5 animate-pulse bg-foreground align-middle" />
+                  )}
                 </span>
                 <span className="ml-auto text-primary">➤</span>
               </div>
@@ -596,17 +798,44 @@ function AppShowcase() {
           </div>
         </div>
 
-        {/* Scene dots */}
-        <div className="mt-6 flex justify-center gap-2">
-          {scenes.map((_, k) => (
+        {/* Pausar animação */}
+        <div className="mt-6 flex justify-center">
+          <button
+            onClick={() => setPaused((v) => !v)}
+            className="inline-flex items-center gap-2 text-xs font-semibold text-muted-foreground hover:text-foreground"
+          >
+            {paused ? <Play className="h-3.5 w-3.5" /> : <Pause className="h-3.5 w-3.5" />}
+            {paused ? "Retomar animação" : "Pausar animação"}
+          </button>
+        </div>
+
+        {/* Pills de recursos, com o cursor guiado clicando no primeiro */}
+        <div className="relative mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 px-2">
+          {[
+            { label: "Perguntar ao AtlasBot", icon: <Bot className="h-4 w-4" /> },
+            { label: "Planejar matrículas", icon: <FileText className="h-4 w-4" /> },
+            { label: "Central de chamados", icon: <Ticket className="h-4 w-4" /> },
+            { label: "Falar com responsáveis", icon: <MessageSquare className="h-4 w-4" /> },
+            { label: "Automatizar tarefas", icon: <Zap className="h-4 w-4" /> },
+          ].map((pill, idx) => (
             <button
-              key={k}
-              onClick={() => setI(k)}
-              aria-label={`Cena ${k + 1}`}
-              className={`h-2 rounded-full transition-all ${
-                k === i ? "w-8 bg-primary" : "w-2 bg-border"
-              }`}
-            />
+              key={pill.label}
+              onClick={() => setI(idx % scenes.length)}
+              className={
+                idx === 0
+                  ? "relative inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground shadow-elegant"
+                  : "inline-flex items-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground"
+              }
+            >
+              {pill.label}
+              {pill.icon}
+              {idx === 0 && (
+                <CursorHand
+                  aria-hidden
+                  className="animate-hand-tap pointer-events-none absolute -bottom-4 -right-3 h-8 w-8 drop-shadow-md"
+                />
+              )}
+            </button>
           ))}
         </div>
       </div>
@@ -614,8 +843,570 @@ function AppShowcase() {
   );
 }
 
-/* ---------------- Trust bar ---------------- */
+function CursorHand({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden>
+      <path
+        d="M9 3.75a1.25 1.25 0 0 1 2.5 0V11h.6v-.75a1.25 1.25 0 0 1 2.5 0V11h.6v-.25a1.25 1.25 0 0 1 2.5 0V15c0 3.45-2.55 6-6 6h-.9c-2.05 0-3.3-.7-4.45-2.15l-2.2-2.75a1.35 1.35 0 0 1 .4-2.05c.7-.4 1.6-.25 2.1.35L9 12.9V3.75Z"
+        fill="white"
+        stroke="#1f2937"
+        strokeWidth="1.1"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
+/* ---------------- Pillars showcase (Conhecimento / Pessoas / Processo / Plataforma) ---------------- */
+/* Comportamento de "scrollytelling": a pill de navegação fica fixa no topo   */
+/* enquanto a página rola, destacando sozinha a seção visível. Dentro de cada */
+/* seção, a lista de destaques também acompanha a rolagem e troca o mockup   */
+/* fixo ao lado — igual ao efeito visto no vídeo de referência do Slack.     */
+
+interface PillarItem {
+  icon: React.ReactNode;
+  title: string;
+  desc: string;
+  mock: React.ReactNode;
+}
+
+interface Pillar {
+  key: string;
+  label: string;
+  heading: string;
+  sub: string;
+  items: PillarItem[];
+}
+
+/** Observa uma lista de elementos e reporta qual está mais perto do centro da tela. */
+function useScrollActiveIndex(count: number) {
+  const [active, setActive] = useState(0);
+  const refs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const idx = Number((entry.target as HTMLElement).dataset.idx);
+            if (!Number.isNaN(idx)) setActive(idx);
+          }
+        }
+      },
+      { rootMargin: "-35% 0px -35% 0px", threshold: 0 },
+    );
+    const nodes = refs.current.slice(0, count);
+    for (const el of nodes) if (el) observer.observe(el);
+    return () => observer.disconnect();
+  }, [count]);
+
+  return { active, refs };
+}
+
+const PILLARS: Pillar[] = [
+  {
+    key: "conhecimento",
+    label: "Conhecimento",
+    heading: "Mostre o contexto para todos, na hora.",
+    sub: "Acesse arquivos, decisões e conversas passadas em vez de perguntar tudo de novo.",
+    items: [
+      {
+        icon: <Bot className="h-5 w-5" />,
+        title: "Conheça o AtlasBot: seu agente pessoal",
+        desc: "Ele conhece o contexto da sua escola e ajuda a resolver tarefas sem trocar de aba.",
+        mock: (
+          <div className="text-sm">
+            <div className="flex items-center gap-2 border-b border-border pb-3">
+              <Bot className="h-4 w-4 text-primary" />
+              <span className="font-bold">AtlasBot</span>
+            </div>
+            <div className="mt-3 space-y-3">
+              <Msg
+                who="Ana (coordenação)"
+                text="Como está a adoção da IA na secretaria?"
+                tone="left"
+              />
+              <Msg
+                who="AtlasBot"
+                text="A adoção está em 62% da equipe, acima da média de escolas parecidas."
+                tone="bot"
+              />
+            </div>
+            <div className="mt-4 flex items-center gap-2 rounded-lg bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
+              <TrendingUp className="h-4 w-4" />
+              Tendência de uso da IA nos últimos 30 dias: +18%
+            </div>
+          </div>
+        ),
+      },
+      {
+        icon: <Search className="h-5 w-5" />,
+        title: "Uma só busca para acessar tudo",
+        desc: "Pesquise mensagens, arquivos e canais com IA e receba respostas com fontes.",
+        mock: <KnowledgeMock />,
+      },
+      {
+        icon: <FileText className="h-5 w-5" />,
+        title: "Traga dados do sistema acadêmico para a conversa",
+        desc: "Veja matrícula, notas e financeiro sem sair do chat.",
+        mock: (
+          <div className="text-sm">
+            <p className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
+              <FileText className="h-3.5 w-3.5" /> Sistema Acadêmico
+            </p>
+            <div className="mt-3 rounded-xl border border-border bg-muted/40 p-4">
+              <p className="font-bold">Beatriz Ramos — 7º Ano B</p>
+              <div className="mt-2 grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+                <span>
+                  Situação: <b className="text-foreground">Matriculada</b>
+                </span>
+                <span>
+                  Financeiro: <b className="text-foreground">Em dia</b>
+                </span>
+                <span>
+                  Faltas no mês: <b className="text-foreground">1</b>
+                </span>
+                <span>
+                  Responsável: <b className="text-foreground">Marcos Souza</b>
+                </span>
+              </div>
+            </div>
+            <div className="mt-3 flex items-center gap-2 rounded-lg bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
+              <Sparkles className="h-4 w-4" />
+              Compartilhado automaticamente no canal #secretaria
+            </div>
+          </div>
+        ),
+      },
+    ],
+  },
+  {
+    key: "pessoas",
+    label: "Pessoas",
+    heading: "Permita que sua equipe se comunique de forma humana.",
+    sub: "Canais, mensagens diretas e chamadas de vídeo integradas — sem trocar de ferramenta.",
+    items: [
+      {
+        icon: <Hash className="h-5 w-5" />,
+        title: "Tudo começa com um canal",
+        desc: "Espaços organizados por turma, setor ou assunto para trabalhar em equipe.",
+        mock: <PeopleMock />,
+      },
+      {
+        icon: <Video className="h-5 w-5" />,
+        title: "Fale ao vivo com Círculos",
+        desc: "Chamadas de áudio e vídeo integradas, sem sair da conversa.",
+        mock: (
+          <div className="text-sm">
+            <p className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
+              <Video className="h-3.5 w-3.5" /> Círculo no canal #reuniao-pais
+            </p>
+            <div className="mt-3 flex items-center justify-center gap-2 rounded-xl border border-border bg-muted/40 p-6">
+              {["MS", "AL", "CR"].map((initials) => (
+                <span
+                  key={initials}
+                  className="grid h-11 w-11 place-items-center rounded-full bg-gradient-brand text-xs font-bold text-primary-foreground shadow-elegant"
+                >
+                  {initials}
+                </span>
+              ))}
+            </div>
+            <div className="mt-3 flex items-center gap-2 rounded-lg bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
+              <Sparkles className="h-4 w-4" />
+              Anotações da reunião geradas automaticamente pela IA
+            </div>
+          </div>
+        ),
+      },
+      {
+        icon: <Send className="h-5 w-5" />,
+        title: "Conecte-se com outras escolas e fornecedores",
+        desc: "Converse com parceiros externos em tempo real, com segurança, direto na plataforma.",
+        mock: (
+          <div className="text-sm">
+            <div className="flex items-center gap-2 border-b border-border pb-3">
+              <Hash className="h-4 w-4 text-muted-foreground" />
+              <span className="font-bold"># editora-didaticos</span>
+            </div>
+            <div className="mt-3 space-y-3">
+              <Msg
+                who="Marcos Souza"
+                text="Podemos fechar o pedido de material do 6º ano?"
+                tone="left"
+              />
+              <Msg
+                who="Editora ABC (externo)"
+                text="Sim! Envio o contrato ainda hoje."
+                tone="right"
+              />
+            </div>
+            <div className="mt-4 flex items-center gap-2 rounded-lg bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
+              <Building2 className="h-4 w-4" />3 pessoas externas são da Editora ABC
+            </div>
+          </div>
+        ),
+      },
+    ],
+  },
+  {
+    key: "processo",
+    label: "Processo",
+    heading: "Automatize o processo, não as pessoas.",
+    sub: "Fluxos de aprovação e listas de chamados para sua equipe focar no que importa.",
+    items: [
+      {
+        icon: <Zap className="h-5 w-5" />,
+        title: "Fluxos de trabalho automáticos",
+        desc: "Crie automações simples por clique, sem precisar programar.",
+        mock: (
+          <div className="text-sm">
+            <p className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
+              <Zap className="h-3.5 w-3.5" /> Fluxo de trabalho — Atualização semanal
+            </p>
+            <div className="mt-3 space-y-2">
+              {[
+                "Enviar mensagem para #coordenacao",
+                "Aguardar respostas por 24h",
+                "Gerar resumo com IA",
+              ].map((step, i) => (
+                <div
+                  key={step}
+                  className="flex items-center gap-2 rounded-lg border border-border bg-muted/30 px-3 py-2 text-xs font-medium"
+                >
+                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
+                    {i + 1}
+                  </span>
+                  {step}
+                </div>
+              ))}
+            </div>
+          </div>
+        ),
+      },
+      {
+        icon: <KanbanSquare className="h-5 w-5" />,
+        title: "Central de chamados",
+        desc: "Acompanhe, aprove e conclua solicitações sem sair da conversa.",
+        mock: <ProcessMock />,
+      },
+      {
+        icon: <LayoutTemplate className="h-5 w-5" />,
+        title: "Comece com um modelo pronto",
+        desc: "Modelos para matrícula, manutenção, RH e muito mais.",
+        mock: (
+          <div className="text-sm">
+            <p className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
+              <LayoutTemplate className="h-3.5 w-3.5" /> Modelos
+            </p>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              {["Matrícula", "Manutenção", "Admissão RH", "Reserva de sala"].map((t) => (
+                <div
+                  key={t}
+                  className="rounded-lg border border-border bg-background px-3 py-3 text-xs font-semibold"
+                >
+                  {t}
+                </div>
+              ))}
+            </div>
+          </div>
+        ),
+      },
+    ],
+  },
+  {
+    key: "plataforma",
+    label: "Plataforma",
+    heading: "Segura, escalável e conectada com tudo.",
+    sub: "Do Google Drive ao sistema acadêmico — conecte as ferramentas que sua escola já usa.",
+    items: [
+      {
+        icon: <Puzzle className="h-5 w-5" />,
+        title: "Conecte as ferramentas que já usa",
+        desc: "Google Drive, Classroom, Microsoft 365 e outras ferramentas do dia a dia.",
+        mock: <PlatformMock />,
+      },
+      {
+        icon: <Code2 className="h-5 w-5" />,
+        title: "Construa com nossos SDKs",
+        desc: "Ferramentas para a equipe de TI criar automações personalizadas.",
+        mock: (
+          <div className="text-sm">
+            <p className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
+              <Layers className="h-3.5 w-3.5" /> Ferramentas para desenvolvedores
+            </p>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              {["API REST", "SDK Node", "SDK Python", "Webhooks"].map((t) => (
+                <div
+                  key={t}
+                  className="flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2.5 text-xs font-semibold"
+                >
+                  <Code2 className="h-3.5 w-3.5 text-primary" />
+                  {t}
+                </div>
+              ))}
+            </div>
+          </div>
+        ),
+      },
+      {
+        icon: <ShieldCheck className="h-5 w-5" />,
+        title: "Segura e em conformidade com a LGPD",
+        desc: "Dados de alunos e responsáveis protegidos em todas as camadas.",
+        mock: (
+          <div className="text-sm">
+            <div className="flex flex-col items-center gap-3 rounded-xl border border-border bg-muted/40 p-6 text-center">
+              <div className="grid h-12 w-12 place-items-center rounded-full bg-gradient-brand text-primary-foreground shadow-elegant">
+                <ShieldCheck className="h-6 w-6" />
+              </div>
+              <p className="font-bold">Dados protegidos ponta a ponta</p>
+              <p className="text-xs text-muted-foreground">
+                Controle de acesso por papel, trilha de auditoria e conformidade com a LGPD.
+              </p>
+            </div>
+          </div>
+        ),
+      },
+    ],
+  },
+];
+
+function PillarsShowcase() {
+  const [activePillar, setActivePillar] = useState(0);
+  const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const idx = Number((entry.target as HTMLElement).dataset.pillarIdx);
+            if (!Number.isNaN(idx)) setActivePillar(idx);
+          }
+        }
+      },
+      { rootMargin: "-45% 0px -45% 0px", threshold: 0 },
+    );
+    const nodes = sectionRefs.current.slice(0, PILLARS.length);
+    for (const el of nodes) if (el) observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  function goToPillar(i: number) {
+    sectionRefs.current[i]?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  return (
+    <section className="mx-auto max-w-6xl px-4 py-16">
+      <div className="sticky top-16 z-30 flex justify-center py-4">
+        <div className="inline-flex flex-wrap items-center justify-center gap-1 rounded-full border border-border bg-card/95 p-1.5 shadow-card-soft backdrop-blur-md">
+          {PILLARS.map((p, i) => (
+            <button
+              key={p.key}
+              onClick={() => goToPillar(i)}
+              className={`rounded-full px-4 py-2.5 text-sm font-semibold transition sm:px-5 ${
+                activePillar === i
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {PILLARS.map((pillar, pillarIdx) => (
+        <div
+          key={pillar.key}
+          ref={(el) => {
+            sectionRefs.current[pillarIdx] = el;
+          }}
+          data-pillar-idx={pillarIdx}
+        >
+          <PillarSection pillar={pillar} />
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function PillarSection({ pillar }: { pillar: Pillar }) {
+  const { active, refs } = useScrollActiveIndex(pillar.items.length);
+
+  return (
+    <div className="grid items-start gap-10 py-16 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{pillar.heading}</h2>
+        <p className="mt-3 text-muted-foreground">{pillar.sub}</p>
+
+        <div className="mt-4 space-y-16 lg:space-y-24">
+          {pillar.items.map((item, i) => (
+            <div
+              key={item.title}
+              ref={(el) => {
+                refs.current[i] = el;
+              }}
+              data-idx={i}
+              className="flex gap-4 py-4"
+            >
+              <div
+                className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl transition ${
+                  active === i
+                    ? "bg-gradient-brand text-primary-foreground shadow-elegant"
+                    : "bg-muted text-muted-foreground"
+                }`}
+              >
+                {item.icon}
+              </div>
+              <div className={`transition ${active === i ? "opacity-100" : "opacity-40"}`}>
+                <h3 className="font-display text-base font-bold">{item.title}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="lg:sticky lg:top-36 lg:self-start">
+        <div className="rounded-2xl border border-border bg-card p-4 shadow-card-soft sm:p-6">
+          {pillar.items[active].mock}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function KnowledgeMock() {
+  return (
+    <div className="text-sm">
+      <div className="flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-muted-foreground">
+        <Search className="h-4 w-4" />
+        Qual é a política de faltas justificadas?
+      </div>
+      <div className="mt-4 rounded-xl border border-border bg-muted/40 p-4">
+        <p className="flex items-center gap-1.5 text-xs font-bold text-primary">
+          <Sparkles className="h-3.5 w-3.5" /> Resposta da IA
+        </p>
+        <p className="mt-2 text-foreground/90">
+          Faltas justificadas precisam de atestado em até 48h, enviado pelo responsável no canal{" "}
+          <span className="font-semibold text-primary">#secretaria</span>. O prazo consta no
+          regimento{" "}
+          <span className="rounded bg-primary/10 px-1 text-xs font-semibold text-primary">
+            [1 - Documento]
+          </span>{" "}
+          e foi confirmado numa mensagem da coordenação{" "}
+          <span className="rounded bg-primary/10 px-1 text-xs font-semibold text-primary">
+            [2 - Mensagem]
+          </span>
+          .
+        </p>
+      </div>
+      <div className="mt-3 flex items-center gap-2 rounded-lg bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
+        <Bot className="h-4 w-4" />
+        AtlasBot está de olho nos canais da sua escola
+      </div>
+    </div>
+  );
+}
+
+function PeopleMock() {
+  return (
+    <div className="text-sm">
+      <div className="flex items-center gap-2 border-b border-border pb-3">
+        <Hash className="h-4 w-4 text-muted-foreground" />
+        <span className="font-bold"># secretaria</span>
+      </div>
+      <div className="mt-3 space-y-3">
+        <Msg who="Marcos (responsável)" text="Onde envio o atestado do meu filho?" tone="left" />
+        <Msg
+          who="Secretaria"
+          text="Pode anexar aqui mesmo no canal, respondemos em até 1 dia útil 🙂"
+          tone="right"
+        />
+        <Msg who="AtlasBot" text="Atestado recebido e encaminhado à coordenação." tone="bot" />
+      </div>
+      <div className="mt-4 flex items-center gap-2 rounded-lg bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
+        <Users className="h-4 w-4" />
+        Círculo ao vivo — reunião de pais, 3 participantes
+      </div>
+    </div>
+  );
+}
+
+function ProcessMock() {
+  const columns: { label: string; items: string[] }[] = [
+    { label: "Urgente", items: ["Vazamento na quadra"] },
+    { label: "Em andamento", items: ["Troca de fechadura", "Ajuste no wi-fi"] },
+    { label: "Resolvido", items: ["Solicitação de crachá"] },
+  ];
+  return (
+    <div className="text-sm">
+      <p className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
+        <KanbanSquare className="h-3.5 w-3.5" /> Central de chamados — manutenção
+      </p>
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        {columns.map((col) => (
+          <div key={col.label} className="rounded-lg bg-muted/40 p-2">
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+              {col.label}
+            </p>
+            <div className="space-y-1.5">
+              {col.items.map((item) => (
+                <div
+                  key={item}
+                  className="rounded-md border border-border bg-card px-2 py-1.5 text-[11px] font-medium leading-snug"
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-4 flex items-center gap-2 rounded-lg bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
+        <Zap className="h-4 w-4" />
+        Fluxo automático: notifica o setor responsável a cada novo chamado
+      </div>
+    </div>
+  );
+}
+
+function PlatformMock() {
+  const apps = pickApps([
+    "Google Drive",
+    "Google Classroom",
+    "Microsoft 365",
+    "Zoom",
+    "Canva",
+    "Sistema Acadêmico",
+  ]);
+  return (
+    <div className="text-sm">
+      <p className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
+        <Puzzle className="h-3.5 w-3.5" /> Apps conectados
+      </p>
+      <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+        {apps.map((app) => (
+          <div
+            key={app.name}
+            className="flex items-center gap-2 rounded-lg border border-border bg-background px-2.5 py-2 text-xs font-semibold"
+          >
+            <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-md ${app.tone}`}>
+              {app.icon}
+            </span>
+            {app.name}
+          </div>
+        ))}
+      </div>
+      <div className="mt-4 flex items-center gap-2 rounded-lg bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
+        <ShieldCheck className="h-4 w-4" />
+        Dados protegidos em todas as camadas, conforme a LGPD
+      </div>
+    </div>
+  );
+}
+
+/* ---------------- Trust bar ---------------- */
 
 function TrustBar() {
   const items = [
@@ -679,7 +1470,8 @@ function Features() {
     <section id="recursos" className="mx-auto max-w-6xl px-4 py-24">
       <div className="mx-auto max-w-2xl text-center">
         <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
-          Tudo o que sua escola precisa para <span className="text-gradient-brand">atender melhor</span>
+          Tudo o que sua escola precisa para{" "}
+          <span className="text-gradient-brand">atender melhor</span>
         </h2>
         <p className="mt-4 text-muted-foreground">
           Menos e-mails perdidos, menos grupos de WhatsApp, mais resolução.
@@ -715,11 +1507,12 @@ function TicketPreview() {
             <Zap className="h-3.5 w-3.5" /> Novidade
           </span>
           <h2 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">
-            Do WhatsApp da diretora para um <span className="text-gradient-brand">painel único</span>.
+            Do WhatsApp da diretora para um{" "}
+            <span className="text-gradient-brand">painel único</span>.
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Conecte e-mail, formulário do site e portal do aluno. Todo pedido vira um ticket rastreável — e
-            ninguém mais fica "esperando resposta".
+            Conecte e-mail, formulário do site e portal do aluno. Todo pedido vira um ticket
+            rastreável — e ninguém mais fica "esperando resposta".
           </p>
           <ul className="mt-6 space-y-3">
             {[
@@ -797,13 +1590,21 @@ function MiniStat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function Msg({ who, text, tone }: { who: string; text: string; tone: "left" | "right" | "bot" }) {
+export function Msg({
+  who,
+  text,
+  tone,
+}: {
+  who: string;
+  text: string;
+  tone: "left" | "right" | "bot";
+}) {
   const bubble =
     tone === "right"
       ? "bg-primary text-primary-foreground ml-auto"
       : tone === "bot"
-      ? "bg-accent/60 text-accent-foreground"
-      : "bg-muted";
+        ? "bg-accent/60 text-accent-foreground"
+        : "bg-muted";
   return (
     <div className="max-w-[85%]" style={{ marginLeft: tone === "right" ? "auto" : 0 }}>
       <p className="mb-1 text-[11px] font-semibold text-muted-foreground">{who}</p>
@@ -853,7 +1654,12 @@ function Pricing() {
       price: "R$ 149",
       unit: "/ mês por escola",
       desc: "Para escolas começando a organizar o atendimento.",
-      features: ["Até 3 agentes", "2 filas de chamados", "Portal do responsável", "Suporte por e-mail"],
+      features: [
+        "Até 3 agentes",
+        "2 filas de chamados",
+        "Portal do responsável",
+        "Suporte por e-mail",
+      ],
       cta: "Começar grátis",
       highlight: false,
     },
@@ -907,12 +1713,16 @@ function Pricing() {
               </span>
             )}
             <h3 className="font-display text-xl font-bold">{p.name}</h3>
-            <p className={`mt-1 text-sm ${p.highlight ? "text-primary-foreground/85" : "text-muted-foreground"}`}>
+            <p
+              className={`mt-1 text-sm ${p.highlight ? "text-primary-foreground/85" : "text-muted-foreground"}`}
+            >
               {p.desc}
             </p>
             <div className="mt-6 flex items-baseline gap-1">
               <span className="font-display text-4xl font-bold">{p.price}</span>
-              <span className={`text-sm ${p.highlight ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+              <span
+                className={`text-sm ${p.highlight ? "text-primary-foreground/80" : "text-muted-foreground"}`}
+              >
                 {p.unit}
               </span>
             </div>
@@ -921,7 +1731,9 @@ function Pricing() {
                 <li key={f} className="flex items-center gap-2">
                   <span
                     className={`grid h-5 w-5 place-items-center rounded-full ${
-                      p.highlight ? "bg-accent text-accent-foreground" : "bg-primary text-primary-foreground"
+                      p.highlight
+                        ? "bg-accent text-accent-foreground"
+                        : "bg-primary text-primary-foreground"
                     }`}
                   >
                     <Check className="h-3 w-3" />
@@ -954,7 +1766,10 @@ function Signup() {
   const navigate = Route.useNavigate();
   const [email, setEmail] = useState("");
   return (
-    <section id="entrar" className="relative overflow-hidden border-y border-border bg-gradient-soft">
+    <section
+      id="entrar"
+      className="relative overflow-hidden border-y border-border bg-gradient-soft"
+    >
       <div
         className="absolute -top-24 left-1/2 -z-0 h-[420px] w-[820px] -translate-x-1/2 rounded-full opacity-25 blur-3xl"
         style={{ background: "var(--gradient-hero)" }}
@@ -962,18 +1777,19 @@ function Signup() {
       <div className="relative mx-auto max-w-xl px-4 py-24 text-center">
         <div className="mx-auto flex items-center justify-center gap-2">
           <Logo />
-          <span className="font-display text-2xl font-bold tracking-tight">EduDesk</span>
+          <span className="font-display text-2xl font-bold tracking-tight">AtlasDesk</span>
         </div>
 
-        <h2 className="mt-10 font-display text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
-          Primeiro, insira seu e-mail
+        <h2 className="mt-10 text-balance font-display text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          Primeiro, insira seu <span className="whitespace-nowrap">e-mail</span>
         </h2>
         <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground sm:text-base">
-          Recomendamos usar o <strong className="text-foreground">e-mail institucional da escola</strong>.
+          Recomendamos usar o{" "}
+          <strong className="text-foreground">e-mail institucional da escola</strong>.
         </p>
 
         <form
-          className="mx-auto mt-8 max-w-md space-y-3 text-left"
+          className="relative mx-auto mt-8 max-w-md space-y-3 text-left"
           onSubmit={(e) => {
             e.preventDefault();
             navigate({ to: "/onboarding", search: { email } });
@@ -998,6 +1814,12 @@ function Signup() {
             Continuar
             <ArrowRight className="h-4 w-4" />
           </button>
+          <span
+            aria-hidden
+            className="animate-hand-tap pointer-events-none absolute -bottom-3 right-6 select-none text-4xl drop-shadow-md"
+          >
+            👆
+          </span>
         </form>
 
         <div className="mx-auto mt-8 flex max-w-md items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
@@ -1009,7 +1831,9 @@ function Signup() {
         <div className="mx-auto mt-5 grid max-w-md gap-3 sm:grid-cols-2">
           <button
             type="button"
-            onClick={() => navigate({ to: "/onboarding", search: { email: email || "voce@gmail.com" } })}
+            onClick={() =>
+              navigate({ to: "/onboarding", search: { email: email || "voce@gmail.com" } })
+            }
             className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-border bg-card text-sm font-bold text-foreground transition hover:bg-muted"
           >
             <GoogleIcon />
@@ -1017,7 +1841,9 @@ function Signup() {
           </button>
           <button
             type="button"
-            onClick={() => navigate({ to: "/onboarding", search: { email: email || "voce@icloud.com" } })}
+            onClick={() =>
+              navigate({ to: "/onboarding", search: { email: email || "voce@icloud.com" } })
+            }
             className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-border bg-card text-sm font-bold text-foreground transition hover:bg-muted"
           >
             <Apple className="h-4 w-4 fill-current" />
@@ -1026,7 +1852,7 @@ function Signup() {
         </div>
 
         <p className="mt-8 text-sm text-muted-foreground">
-          Já usa o EduDesk?{" "}
+          Já usa o AtlasDesk?{" "}
           <a href="#" className="font-semibold text-primary hover:underline">
             Entrar em uma escola existente
           </a>
@@ -1054,7 +1880,7 @@ function GoogleIcon() {
 
 /* ---------------- CTA ---------------- */
 
-function CTA() {
+export function CTA() {
   return (
     <section className="mx-auto max-w-6xl px-4 pb-24">
       <div className="relative overflow-hidden rounded-3xl bg-gradient-hero px-8 py-16 text-center text-primary-foreground shadow-elegant">
@@ -1063,7 +1889,7 @@ function CTA() {
           Comece a atender sua comunidade escolar hoje.
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-primary-foreground/85">
-          Leva menos de 10 minutos para configurar o EduDesk na sua escola.
+          Leva menos de 10 minutos para configurar o AtlasDesk na sua escola.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <a
@@ -1087,29 +1913,29 @@ function CTA() {
 
 /* ---------------- Footer ---------------- */
 
-function Footer() {
+export function Footer() {
   return (
     <footer className="border-t border-border bg-card">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <div className="flex items-center gap-2">
             <Logo />
-            <span className="font-display text-lg font-bold">EduDesk</span>
+            <span className="font-display text-lg font-bold">AtlasDesk</span>
           </div>
           <p className="mt-3 text-sm text-muted-foreground">
             Helpdesk pensado para a rotina da gestão escolar.
           </p>
         </div>
+        <FooterCol title="Produto" items={["Recursos", "Preços", "Integrações", "Novidades"]} />
         <FooterCol
-          title="Produto"
-          items={["Recursos", "Preços", "Integrações", "Novidades"]}
+          title="Escolas"
+          items={["Educação Infantil", "Ensino Fundamental", "Ensino Médio", "Redes"]}
         />
-        <FooterCol title="Escolas" items={["Educação Infantil", "Ensino Fundamental", "Ensino Médio", "Redes"]} />
         <FooterCol title="Empresa" items={["Sobre", "Blog", "Contato", "Central de ajuda"]} />
       </div>
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-6 text-xs text-muted-foreground">
-          <span>© {new Date().getFullYear()} EduDesk. Todos os direitos reservados.</span>
+          <span>© {new Date().getFullYear()} AtlasDesk. Todos os direitos reservados.</span>
           <div className="flex gap-4">
             <a href="#">Privacidade</a>
             <a href="#">Termos</a>

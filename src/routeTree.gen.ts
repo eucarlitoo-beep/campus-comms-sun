@@ -9,28 +9,37 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SolucoesRouteImport } from './routes/solucoes'
-import { Route as RecursosRouteImport } from './routes/recursos'
-import { Route as PrecosRouteImport } from './routes/precos'
-import { Route as OnboardingRouteImport } from './routes/onboarding'
-import { Route as FuncionalidadesRouteImport } from './routes/funcionalidades'
-import { Route as EscolasRouteImport } from './routes/escolas'
-import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as CanaisRouteImport } from './routes/canais'
+import { Route as MensagensRouteImport } from './routes/mensagens'
+import { Route as ModelosRouteImport } from './routes/modelos'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as TiSuporteRouteImport } from './routes/ti-suporte'
 
-const SolucoesRoute = SolucoesRouteImport.update({
-  id: '/solucoes',
-  path: '/solucoes',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RecursosRoute = RecursosRouteImport.update({
-  id: '/recursos',
-  path: '/recursos',
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PrecosRoute = PrecosRouteImport.update({
-  id: '/precos',
-  path: '/precos',
+const CanaisRoute = CanaisRouteImport.update({
+  id: '/canais',
+  path: '/canais',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MensagensRoute = MensagensRouteImport.update({
+  id: '/mensagens',
+  path: '/mensagens',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModelosRoute = ModelosRouteImport.update({
+  id: '/modelos',
+  path: '/modelos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OnboardingRoute = OnboardingRouteImport.update({
@@ -38,123 +47,115 @@ const OnboardingRoute = OnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FuncionalidadesRoute = FuncionalidadesRouteImport.update({
-  id: '/funcionalidades',
-  path: '/funcionalidades',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EscolasRoute = EscolasRouteImport.update({
-  id: '/escolas',
-  path: '/escolas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const TiSuporteRoute = TiSuporteRouteImport.update({
+  id: '/ti-suporte',
+  path: '/ti-suporte',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
-  '/escolas': typeof EscolasRoute
-  '/funcionalidades': typeof FuncionalidadesRoute
+  '/app': typeof AppRoute
+  '/canais': typeof CanaisRoute
+  '/mensagens': typeof MensagensRoute
+  '/modelos': typeof ModelosRoute
   '/onboarding': typeof OnboardingRoute
-  '/precos': typeof PrecosRoute
-  '/recursos': typeof RecursosRoute
-  '/solucoes': typeof SolucoesRoute
+  '/ti-suporte': typeof TiSuporteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
-  '/escolas': typeof EscolasRoute
-  '/funcionalidades': typeof FuncionalidadesRoute
+  '/app': typeof AppRoute
+  '/canais': typeof CanaisRoute
+  '/mensagens': typeof MensagensRoute
+  '/modelos': typeof ModelosRoute
   '/onboarding': typeof OnboardingRoute
-  '/precos': typeof PrecosRoute
-  '/recursos': typeof RecursosRoute
-  '/solucoes': typeof SolucoesRoute
+  '/ti-suporte': typeof TiSuporteRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
-  '/escolas': typeof EscolasRoute
-  '/funcionalidades': typeof FuncionalidadesRoute
+  '/app': typeof AppRoute
+  '/canais': typeof CanaisRoute
+  '/mensagens': typeof MensagensRoute
+  '/modelos': typeof ModelosRoute
   '/onboarding': typeof OnboardingRoute
-  '/precos': typeof PrecosRoute
-  '/recursos': typeof RecursosRoute
-  '/solucoes': typeof SolucoesRoute
+  '/ti-suporte': typeof TiSuporteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/auth'
-    | '/escolas'
-    | '/funcionalidades'
+    | '/app'
+    | '/canais'
+    | '/mensagens'
+    | '/modelos'
     | '/onboarding'
-    | '/precos'
-    | '/recursos'
-    | '/solucoes'
+    | '/ti-suporte'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/auth'
-    | '/escolas'
-    | '/funcionalidades'
+    | '/app'
+    | '/canais'
+    | '/mensagens'
+    | '/modelos'
     | '/onboarding'
-    | '/precos'
-    | '/recursos'
-    | '/solucoes'
+    | '/ti-suporte'
   id:
     | '__root__'
     | '/'
-    | '/auth'
-    | '/escolas'
-    | '/funcionalidades'
+    | '/app'
+    | '/canais'
+    | '/mensagens'
+    | '/modelos'
     | '/onboarding'
-    | '/precos'
-    | '/recursos'
-    | '/solucoes'
+    | '/ti-suporte'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthRoute: typeof AuthRoute
-  EscolasRoute: typeof EscolasRoute
-  FuncionalidadesRoute: typeof FuncionalidadesRoute
+  AppRoute: typeof AppRoute
+  CanaisRoute: typeof CanaisRoute
+  MensagensRoute: typeof MensagensRoute
+  ModelosRoute: typeof ModelosRoute
   OnboardingRoute: typeof OnboardingRoute
-  PrecosRoute: typeof PrecosRoute
-  RecursosRoute: typeof RecursosRoute
-  SolucoesRoute: typeof SolucoesRoute
+  TiSuporteRoute: typeof TiSuporteRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/solucoes': {
-      id: '/solucoes'
-      path: '/solucoes'
-      fullPath: '/solucoes'
-      preLoaderRoute: typeof SolucoesRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/recursos': {
-      id: '/recursos'
-      path: '/recursos'
-      fullPath: '/recursos'
-      preLoaderRoute: typeof RecursosRouteImport
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/precos': {
-      id: '/precos'
-      path: '/precos'
-      fullPath: '/precos'
-      preLoaderRoute: typeof PrecosRouteImport
+    '/canais': {
+      id: '/canais'
+      path: '/canais'
+      fullPath: '/canais'
+      preLoaderRoute: typeof CanaisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mensagens': {
+      id: '/mensagens'
+      path: '/mensagens'
+      fullPath: '/mensagens'
+      preLoaderRoute: typeof MensagensRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/modelos': {
+      id: '/modelos'
+      path: '/modelos'
+      fullPath: '/modelos'
+      preLoaderRoute: typeof ModelosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/onboarding': {
@@ -164,32 +165,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/funcionalidades': {
-      id: '/funcionalidades'
-      path: '/funcionalidades'
-      fullPath: '/funcionalidades'
-      preLoaderRoute: typeof FuncionalidadesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/escolas': {
-      id: '/escolas'
-      path: '/escolas'
-      fullPath: '/escolas'
-      preLoaderRoute: typeof EscolasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/ti-suporte': {
+      id: '/ti-suporte'
+      path: '/ti-suporte'
+      fullPath: '/ti-suporte'
+      preLoaderRoute: typeof TiSuporteRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -197,13 +177,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthRoute: AuthRoute,
-  EscolasRoute: EscolasRoute,
-  FuncionalidadesRoute: FuncionalidadesRoute,
+  AppRoute: AppRoute,
+  CanaisRoute: CanaisRoute,
+  MensagensRoute: MensagensRoute,
+  ModelosRoute: ModelosRoute,
   OnboardingRoute: OnboardingRoute,
-  PrecosRoute: PrecosRoute,
-  RecursosRoute: RecursosRoute,
-  SolucoesRoute: SolucoesRoute,
+  TiSuporteRoute: TiSuporteRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

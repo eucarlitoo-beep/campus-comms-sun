@@ -65,6 +65,37 @@
   --transition-smooth: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.dark {
+  --background: oklch(0.17 0.02 255);
+  --foreground: oklch(0.95 0.01 250);
+
+  --card: oklch(0.21 0.025 255);
+  --card-foreground: oklch(0.95 0.01 250);
+
+  --primary: oklch(0.64 0.16 255);
+  --primary-foreground: oklch(0.14 0.02 250);
+  --primary-glow: oklch(0.72 0.17 250);
+
+  --accent: oklch(0.8 0.15 95);
+  --accent-foreground: oklch(0.18 0.05 250);
+
+  --secondary: oklch(0.26 0.02 255);
+  --secondary-foreground: oklch(0.92 0.01 250);
+
+  --muted: oklch(0.24 0.02 255);
+  --muted-foreground: oklch(0.68 0.02 255);
+
+  --border: oklch(0.3 0.02 255);
+  --ring: oklch(0.64 0.16 255);
+
+  --gradient-hero: linear-gradient(135deg, oklch(0.3 0.1 255) 0%, oklch(0.4 0.14 250) 55%, oklch(0.6 0.15 95) 100%);
+  --gradient-soft: linear-gradient(180deg, oklch(0.2 0.03 250) 0%, oklch(0.24 0.05 95 / 0.25) 100%);
+  --gradient-brand: linear-gradient(135deg, oklch(0.4 0.15 255), oklch(0.55 0.17 250));
+  --shadow-elegant: 0 20px 60px -20px color-mix(in oklab, oklch(0.1 0.05 250) 55%, transparent);
+  --shadow-glow: 0 0 0 6px color-mix(in oklab, oklch(0.8 0.15 95) 20%, transparent);
+  --shadow-card: 0 10px 40px -15px color-mix(in oklab, oklch(0.05 0.05 250) 45%, transparent);
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
@@ -104,4 +135,26 @@
 }
 @utility shadow-card-soft {
   box-shadow: var(--shadow-card);
+}
+
+@keyframes hand-tap {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(-8deg) scale(1);
+  }
+  30% {
+    transform: translate(-8px, -12px) rotate(-8deg) scale(1);
+  }
+  55% {
+    transform: translate(1px, 3px) rotate(-4deg) scale(0.92);
+  }
+  68% {
+    transform: translate(1px, 3px) rotate(-4deg) scale(1.05);
+  }
+  85% {
+    transform: translate(-8px, -12px) rotate(-8deg) scale(1);
+  }
+}
+@utility animate-hand-tap {
+  animation: hand-tap 2.4s ease-in-out infinite;
 }
