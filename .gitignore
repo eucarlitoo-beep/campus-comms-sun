@@ -18,6 +18,12 @@ dist-ssr
 
 # Wrangler / Cloudflare
 .wrangler/
+
+# Chat server (dados locais, não devem ir para o git)
+server/data.json
+server/uploads/*
+!server/uploads/.gitkeep
+.env.local
 .dev.vars
 
 # Editor directories and files

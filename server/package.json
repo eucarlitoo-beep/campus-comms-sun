@@ -1,0 +1,19 @@
+{
+  "name": "atlasdesk-chat-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Servidor de chat em tempo real do AtlasDesk (Express + Socket.IO). Roda separado do site (que fica na Cloudflare), pois precisa de um processo Node contínuo com WebSockets.",
+  "scripts": {
+    "start": "node index.mjs",
+    "dev": "node --watch index.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "multer": "^2.0.0",
+    "nanoid": "^5.0.7",
+    "socket.io": "^4.7.5"
+  }
+}
